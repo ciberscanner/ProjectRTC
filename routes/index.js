@@ -41,12 +41,13 @@ exports.update = function(id, name, isPrivate) {
 
 // GET home 
 exports.index = function(req, res) {
-  res.render('index', { 
-                        title: 'Project RTC', 
-                        header: 'WebRTC live streaming',
-                        footer: 'pierre@chabardes.net',
-                        id: req.params.id
-                      });
+  // res.render('index', { 
+  //                       title: 'Project RTC', 
+  //                       header: 'WebRTC live streaming',
+  //                       footer: 'pierre@chabardes.net',
+  //                       id: req.params.id
+  //                     });
+      res.redirect('http://54.214.218.3:3000/streams');
 };
 
 // GET crowd
