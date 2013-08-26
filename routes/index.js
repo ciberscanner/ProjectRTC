@@ -50,6 +50,13 @@ exports.index = function(req, res) {
       
 };
 
+// GET watch/:id
+// this is a redirect hack for facebook linking 
+// on android with custom manufacturer browser
+exports.watch = function(req, res) {
+  res.redirect('../' + req.params.id);
+}
+
 // GET crowd
 exports.crowd = function(req, res) {
   res.render('crowd', { 

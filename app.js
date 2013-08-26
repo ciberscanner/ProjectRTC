@@ -31,6 +31,7 @@ app.get('/streams', routes.streams);
 app.get('/streams/:id', routes.streams);
 app.get('/crowd', routes.crowd);
 app.get('/join', routes.join);
+app.get('/watch/:id', routes.watch);
 app.get('/', routes.index);
 app.get('/:id', routes.index);
 
