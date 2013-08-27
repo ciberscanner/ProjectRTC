@@ -10,7 +10,8 @@ var PeerManager = (function () {
         },
         peerConnectionConstraints: {
           optional: [
-                     {"DtlsSrtpKeyAgreement": (browser === 'firefox')}
+                     {"DtlsSrtpKeyAgreement": (browser === 'firefox')},
+                     {RtpDataChannels: true}
                     ]
         },
         mediaConstraints: {
@@ -59,6 +60,22 @@ var PeerManager = (function () {
           break;
       }
     };
+    peer.pc.ondatachannel = function(event) {
+      peer.receiveChannel = event.channel;
+      peer.receiveChannel.onmessage = function(msg) {
+        handleMessage(msg.data);
+      };
+    }
+    try {
+      // Reliable Data Channels not yet supported in Chrome
+      // Data Channel api supported from Chrome M25. 
+      // You need to start chrome with  --enable-data-channels flag.
+      peer.sendChannel = pc.createDataChannel("sendDataChannel", 
+                                           {reliable: false});
+      console.log('Created send data channel');
+    } catch (e) {
+      console.log('Error creating send datachannel ' + e.message);  
+    }
     peerDatabase[remoteId] = peer;
         
     return peer;
@@ -121,12 +138,19 @@ var PeerManager = (function () {
   }
   function send(type, to, payload) {
     console.log('sending ' + type + ' to ' + to);
+    var message = {
+        to: to,
+        type: type,
+        payload: payload
+      };
 
-    connection.emit('message', {
-      to: to,
-      type: type,
-      payload: payload
-    });
+    var dataChannel = peerDatabase[id].sendChannel;
+    // if datachannel is available, use it to send messages
+    if(!!dataChannel) {
+      dataChannel.send(message);
+    } else {
+      connection.emit('message', message);
+    }
   }
   function toggleLocalStream(pc) {
     if(localStream) {
@@ -177,4 +201,6 @@ var Peer = function (pcConfig, pcConstraints) {
   this.pc = new RTCPeerConnection(pcConfig, pcConstraints);
   this.remoteVideoEl = document.createElement('video');
   this.remoteVideoEl.controls = true;
+  this.inputChannel;
+  this.outputChannel;
 }

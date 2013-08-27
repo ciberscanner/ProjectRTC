@@ -71,7 +71,7 @@ var RTCViewModel = function(client, path) {
         if(!!stream) {
           stream.update(data[remoteId]);
           mappedStreams.push(stream);
-        // else create a new stream (escape own stream)
+        // else create a new stream (ignore own stream)
         } else {
           if(remoteId !== client.getId()) {
             mappedStreams.push(new RTCStream(remoteId, data[remoteId]));
