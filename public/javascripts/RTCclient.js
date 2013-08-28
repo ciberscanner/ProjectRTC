@@ -199,10 +199,9 @@ var PeerManager = (function () {
 });
 
 var Peer = function (pcConfig, pcConstraints) {
-  var pc = new RTCPeerConnection(pcConfig, pcConstraints),
-      remoteVideoEl = document.createElement('video'),
-      receiveChannel,
-      sendChannel;
-
-  remoteVideoEl.controls = true;
+  this.pc = new RTCPeerConnection(pcConfig, pcConstraints);
+  this.remoteVideoEl = document.createElement('video');
+  this.remoteVideoEl.controls = true;
+  this.receiveChannel;
+  this.sendChannel;
 }
