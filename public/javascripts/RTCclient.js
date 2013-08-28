@@ -202,6 +202,6 @@ var Peer = function (pcConfig, pcConstraints) {
   this.pc = new RTCPeerConnection(pcConfig, pcConstraints);
   this.remoteVideoEl = document.createElement('video');
   this.remoteVideoEl.controls = true;
-  this.receiveChannel;
-  this.sendChannel;
+  this.receiveChannel = null;
+  this.sendChannel = null;
 }
