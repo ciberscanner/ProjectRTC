@@ -144,10 +144,11 @@ var PeerManager = (function () {
         payload: payload
       };
 
-    var dataChannel = peerDatabase[id].sendChannel;
+    var dataChannel = peerDatabase[to].sendChannel;
     // if datachannel is available, use it to send messages
     if(!!dataChannel) {
       dataChannel.send(message);
+    // else send it through the signaling server
     } else {
       connection.emit('message', message);
     }
@@ -201,6 +202,6 @@ var Peer = function (pcConfig, pcConstraints) {
   this.pc = new RTCPeerConnection(pcConfig, pcConstraints);
   this.remoteVideoEl = document.createElement('video');
   this.remoteVideoEl.controls = true;
-  this.inputChannel;
-  this.outputChannel;
+  this.receiveChannel;
+  this.sendChannel;
 }
